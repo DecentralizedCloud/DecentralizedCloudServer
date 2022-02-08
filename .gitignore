@@ -8,6 +8,7 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+firebaseCredentials.json
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
