@@ -52,9 +52,13 @@ exports.validateJSONCredentials = async (req, res, next) => {
 exports.validateFormDataCredentials = async (req, res, next) => {
   let form = formidable({ multiples: true, keepExtensions: true });
 
-  form.parse(req, async (err, fields, file) => {
+  console.log("parsing form");
+  let reqCopy = Object.create(req);
+  // console.log(reqCopy);
+  form.parse(req, async (err, fields, files) => {
+    console.log("form parsed");
     const { userId, apiKey, projectId, projectName } = fields;
-    console.log(req.body);
+
     if (!userId || !apiKey || !projectId || !projectName) {
       return res.status(400).json({ error: "not initialized properly" });
     }
@@ -95,6 +99,9 @@ exports.validateFormDataCredentials = async (req, res, next) => {
       console.log(err);
       return res.status(400).json({ error: err });
     }
+    console.log("calling next()");
+    req.fields = fields;
+    req.files = files;
     next();
   });
 };
