@@ -4,7 +4,7 @@ const formidable = require("formidable");
 admin.database();
 exports.validateJSONCredentials = async (req, res, next) => {
   const { userId, apiKey, projectId, projectName } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   if (!userId || !apiKey || !projectId || !projectName) {
     return res.status(400).json({ error: "not initialized properly" });
   }

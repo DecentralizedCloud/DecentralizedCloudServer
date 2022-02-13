@@ -15,12 +15,14 @@ exports.uploadFile = async (req, res) => {
   const dbRefPath = `${userId}/projects/${projectId}/data/${reference}`;
   const dbRef = admin.database().ref(dbRefPath);
   const extension = files.file.originalFilename.split(".")[1];
+  const mimetype = files.file.mimetype;
   let obj = {
     createdOn: admin.database.ServerValue.TIMESTAMP,
     downloadURL: `https://ipfs.io/ipfs/${hash}`,
     extension,
     fileName: fileName.split(".")[0],
     hash: hash.toString(),
+    mimetype,
   };
   console.log(obj);
   await dbRef.child(fileName).set(obj);
