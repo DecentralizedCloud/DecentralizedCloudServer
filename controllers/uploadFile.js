@@ -35,13 +35,16 @@ const addFile = async (fileName, filePath, projectId, apiKey) => {
   const file = fs.readFileSync(filePath);
   // Encryption Starts
   const algorithm = "aes-256-gcm"; // Choosing Algorithm
-  const initVector = Buffer.from(apiKey); // initVector and securityKey will be used to encrypt data
-  const securityKey = Buffer.from(projectId);
-  const cipher = crypto.createCipheriv(algorithm, securityKey, initVector); // initialize cipher
-  let encryptedFile = cipher.update(file, "utf-8", "hex"); // encrypt the file 
-  encryptedFile += cipher.final("hex"); 
-  // Encryption Ends
 
-  const { cid } = await ipfs.add({ path: fileName, content: encryptedFile });
+  const securityKey =  Buffer.concat([Buffer.from(projectId, "base64")], 32); // initVector and securityKey will be used to encrypt data
+  const initVector = Buffer.concat([Buffer.from(apiKey, "base64")], 16);
+
+
+  const cipher = crypto.createCipheriv(algorithm, securityKey, initVector); // initialize cipher
+  let encryptedFile = cipher.update(file, "utf-8", "base64"); // encrypt the file
+  encryptedFile += cipher.final("base64"); 
+  // Encryption Ends  
+
+  const { cid } = await ipfs.add({ path: fileName, content: encryptedFile});
   return cid;
 };
