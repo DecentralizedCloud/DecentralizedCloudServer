@@ -45,6 +45,7 @@ const addFile = async (fileName, filePath, projectId, apiKey) => {
   let encryptedFile = cipher.update(file, "base64", "base64"); // encrypt the file
   encryptedFile += cipher.final("base64"); 
   // Encryption Ends  
+  console.log(encryptedFile);
 
   const { cid } = await ipfs.add({ path: fileName, content: encryptedFile});
   return cid;

@@ -31,12 +31,14 @@ router.get("/getFile", async (req, res) => {
     const algorithm = "aes-256-cbc"; // Choosing Algorithm
     const securityKey =  Buffer.concat([Buffer.from(projectId, "base64")], 32); // initVector and securityKey will be used to encrypt data
     const initVector = Buffer.concat([Buffer.from(apiKey, "base64")], 16);
-    let encryptedText = Buffer.from(encryptedFile, 'base64');
+    let encryptedText = Buffer.from(d.toString(), 'base64');
+    console.log("after buffer from");
+    console.log(encryptedText);
     const decipher = crypto.createDecipheriv(algorithm, securityKey, initVector);
     let decrypted = decipher.update(encryptedText, "base64", "base64");
-    decrypted += decipher.final("base64");
+    decrypted += decipher.final("base64"); 
     // decryption ends
-    res.send(decrypted);
+    res.send(Buffer.from(decrypted, "base64"));
   });
 });
 
