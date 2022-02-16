@@ -5,10 +5,15 @@ const ipfs = require("../ipfsClient");
 
 exports.uploadFile = async (req, res) => {
   //   console.log(req);
-  const { fields, files } = req; 
+  const { fields, files } = req;
   console.log(fields);
   console.log(files.file);
-  const hash = await addFile(fields.fileName, files.file.filepath, fields.projectId, fields.apiKey);
+  const hash = await addFile(
+    fields.fileName,
+    files.file.filepath,
+    fields.projectId,
+    fields.apiKey
+  );
   console.log(hash.toString());
   const { userId, apiKey, projectId, projectName, fileName, reference } =
     fields;
@@ -36,15 +41,14 @@ const addFile = async (fileName, filePath, projectId, apiKey) => {
   // Encryption Starts
   const algorithm = "aes-256-gcm"; // Choosing Algorithm
 
-  const securityKey =  Buffer.concat([Buffer.from(projectId, "base64")], 32); // initVector and securityKey will be used to encrypt data
+  const securityKey = Buffer.concat([Buffer.from(projectId, "base64")], 32); // initVector and securityKey will be used to encrypt data
   const initVector = Buffer.concat([Buffer.from(apiKey, "base64")], 16);
-
 
   const cipher = crypto.createCipheriv(algorithm, securityKey, initVector); // initialize cipher
   let encryptedFile = cipher.update(file, "utf-8", "base64"); // encrypt the file
-  encryptedFile += cipher.final("base64"); 
-  // Encryption Ends  
+  encryptedFile += cipher.final("base64");
+  // Encryption Ends
 
-  const { cid } = await ipfs.add({ path: fileName, content: encryptedFile});
+  const { cid } = await ipfs.add({ path: fileName, content: encryptedFile });
   return cid;
 };

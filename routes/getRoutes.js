@@ -28,4 +28,19 @@ router.get("/getFile", async (req, res) => {
   });
 });
 
+router.get("/metadata", async (req, res) => {
+  console.log(req.body);
+  const { userId, apiKey, projectId, projectName, filePath } = req.body;
+
+  const dbRef = admin
+    .database()
+    .ref(`${userId}/projects/${projectId}/data/${filePath}`);
+
+  let data = await (await dbRef.get()).val();
+
+  console.log(data);
+
+  return res.status(200).json(data);
+});
+
 module.exports = router;
