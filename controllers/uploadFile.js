@@ -29,7 +29,7 @@ exports.uploadFile = async (req, res) => {
     hash: hash.toString(),
     mimetype,
   };
-  console.log(obj);
+  // console.log(obj);
   await dbRef.child(fileName).set(obj);
   res.status(200).json({ obj });
 };
@@ -38,15 +38,17 @@ exports.uploadFile = async (req, res) => {
 
 const addFile = async (fileName, filePath, projectId, apiKey) => {
   const file = fs.readFileSync(filePath);
+
   // Encryption Starts
-  const algorithm = "aes-256-gcm"; // Choosing Algorithm
+  const algorithm = "aes-256-cbc"; // Choosing Algorithm
 
   const securityKey = Buffer.concat([Buffer.from(projectId, "base64")], 32); // initVector and securityKey will be used to encrypt data
   const initVector = Buffer.concat([Buffer.from(apiKey, "base64")], 16);
 
   const cipher = crypto.createCipheriv(algorithm, securityKey, initVector); // initialize cipher
-  let encryptedFile = cipher.update(file, "utf-8", "base64"); // encrypt the file
+  let encryptedFile = cipher.update(file, "base64", "base64"); // encrypt the file
   encryptedFile += cipher.final("base64");
+  // console.log(encryptedFile);
   // Encryption Ends
 
   const { cid } = await ipfs.add({ path: fileName, content: encryptedFile });
