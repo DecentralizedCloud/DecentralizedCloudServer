@@ -33,18 +33,17 @@ router.get("/getFile", async (req, res) => {
     const securityKey = Buffer.concat([Buffer.from(projectId, "base64")], 32); // initVector and securityKey will be used to encrypt data
     const initVector = Buffer.concat([Buffer.from(apiKey, "base64")], 16);
     let encryptedText = Buffer.from(d.toString(), "base64");
-    // let encryptedText = d;
+    console.log("after buffer from");
+    console.log(encryptedText);
     const decipher = crypto.createDecipheriv(
       algorithm,
       securityKey,
       initVector
     );
     let decrypted = decipher.update(encryptedText, "base64", "base64");
-
     decrypted += decipher.final("base64");
-    // fs.writeFileSync("temp.txt", decrypted);
     // decryption ends
-    res.send(decrypted);
+    res.send(Buffer.from(decrypted, "base64"));
   });
 });
 
