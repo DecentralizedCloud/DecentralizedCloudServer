@@ -11,6 +11,7 @@ const {
   validateFormDataCredentials,
 } = require("./middlewares/validateRequest");
 
+//sets port using env if available
 const port = process.env.PORT || 3000;
 
 app.use(cors());
