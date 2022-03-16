@@ -14,7 +14,6 @@ exports.uploadFile = async (req, res) => {
     fields.projectId,
     fields.apiKey
   );
-  // console.log(hash.toString());
   const { userId, apiKey, projectId, projectName, fileName, reference } =
     fields;
   const dbRefPath = `${userId}/projects/${projectId}/data/${reference}`;
@@ -35,7 +34,6 @@ exports.uploadFile = async (req, res) => {
   // console.log(obj);
   await dbRef.child(fileName).set(obj);
   res.status(200).json({ obj });
-  res.send("asfsdf");
 };
 
 //Helpers
