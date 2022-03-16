@@ -35,7 +35,6 @@ exports.uploadFile = async (req, res) => {
   // console.log(obj);
   await dbRef.child(fileName).set(obj);
   res.status(200).json({ obj });
-  res.send("asfsdf");
 };
 
 //Helpers
