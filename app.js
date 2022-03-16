@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const bodyParser = require("body-parser");
-
+const {deleteResource} = require("./controllers/deleteRresource")
 const uploadRouter = require("./routes/uploadRoutes");
 const getRouter = require("./routes/getRoutes");
 const {
@@ -20,6 +20,8 @@ app.use(bodyParser.json());
 app.use("/upload", validateFormDataCredentials, uploadRouter);
 
 app.use("/get", validateJSONCredentials, getRouter);
+
+app.delete("/delete", validateJSONCredentials, deleteResource)
 
 app.listen(port, () => {
   console.log(`Up and running on :${port}!!`);
