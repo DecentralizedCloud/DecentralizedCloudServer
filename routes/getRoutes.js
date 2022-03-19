@@ -10,11 +10,11 @@ const fs = require("fs");
  */
 router.get("/getFile", async (req, res) => {
   console.log(req.body);
-  const { userId, apiKey, projectId, projectName, filePath } = req.body;
+  const { userId, apiKey, projectId, projectName, reference } = req.body;
 
   const dbRef = admin
     .database()
-    .ref(`${userId}/projects/${projectId}/data/${filePath}`);
+    .ref(`${userId}/projects/${projectId}/data/${reference}`);
 
   let data = await (await dbRef.get()).val();
 
@@ -49,11 +49,11 @@ router.get("/getFile", async (req, res) => {
 
 router.get("/metadata", async (req, res) => {
   console.log(req.body);
-  const { userId, apiKey, projectId, projectName, filePath } = req.body;
+  const { userId, apiKey, projectId, projectName, reference } = req.body;
 
   const dbRef = admin
     .database()
-    .ref(`${userId}/projects/${projectId}/data/${filePath}`);
+    .ref(`${userId}/projects/${projectId}/data/${reference}`);
 
   let data = await (await dbRef.get()).val();
 
